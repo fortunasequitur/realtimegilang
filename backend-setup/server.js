@@ -1,4 +1,3 @@
-
 // Sample Express.js backend server for MySQL integration
 // Run this separately from your React app
 
@@ -16,11 +15,11 @@ app.use(express.json());
 
 // Database connection
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'stats_dashboard',
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 };
 
 // Create database connection pool
@@ -30,7 +29,8 @@ const pool = mysql.createPool(dbConfig);
 app.get('/api/visits/recent', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM visits ORDER BY timestamp DESC LIMIT 10'
+      `SELECT id, ip, city, region, country, loc, org, timezone, user_agent, referer, is_mobile, connection_type, subsource, timestamp
+       FROM visits ORDER BY timestamp DESC LIMIT 10`
     );
     res.json(rows);
   } catch (error) {
@@ -42,7 +42,8 @@ app.get('/api/visits/recent', async (req, res) => {
 app.get('/api/conversions/recent', async (req, res) => {
   try {
     const [rows] = await pool.execute(
-      'SELECT * FROM conversions ORDER BY time DESC LIMIT 10'
+      `SELECT id, network, subid, payout, country, time
+       FROM conversions ORDER BY time DESC LIMIT 10`
     );
     res.json(rows);
   } catch (error) {
