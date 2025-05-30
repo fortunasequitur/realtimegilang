@@ -255,11 +255,11 @@ const PerformsTeam = () => {
                                 <span className="font-medium">{country.country}</span>
                               </div>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-primary">{(country.clicks ?? 0).toLocaleString()}</TableCell>
-                            <TableCell className="text-right font-bold">{(country.unique ?? 0).toLocaleString()}</TableCell>
-                            <TableCell className="text-right font-bold">{(country.conversions ?? 0).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold text-primary">{Number(country.clicks).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold">{Number(country.unique).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold">{Number(country.conversions).toLocaleString()}</TableCell>
                             <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                              ${(country.earnings ?? 0).toFixed(2)}
+                              ${Number(country.earnings).toFixed(2)}
                             </TableCell>
                           </TableRow>
                         ))}
