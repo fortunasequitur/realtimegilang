@@ -28,7 +28,7 @@ class MySQLApiService {
 
   async getStatsSummary(): Promise<StatsSummary> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/stats.php?action=summary');
+      const response = await fetch('https://sobatdigital.online/api/stats_summary.php');
       return await response.json();
     } catch (error) {
       console.error('Error fetching stats summary:', error);
@@ -42,18 +42,13 @@ class MySQLApiService {
   }
 
   async getStatsData(startDate: string, endDate: string): Promise<StatsData[]> {
-    try {
-      const response = await fetch(`https://sobatdigital.online/api/stats.php?action=range&start=${startDate}&end=${endDate}`);
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching stats data:', error);
-      return [];
-    }
+    // Jika ada endpoint khusus, bisa diubah di sini
+    return [];
   }
 
   async getTeamPerformance(): Promise<TeamPerformance[]> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/stats.php?action=team');
+      const response = await fetch('https://sobatdigital.online/api/team_performance.php');
       return await response.json();
     } catch (error) {
       console.error('Error fetching team performance:', error);
