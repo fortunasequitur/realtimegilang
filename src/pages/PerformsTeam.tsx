@@ -83,6 +83,16 @@ const PerformsTeam = () => {
   // Tambahkan validasi agar tidak error jika teamData bukan array
   const safeTeamData = Array.isArray(teamData) ? teamData : [];
 
+  // Fungsi aman untuk render angka
+  function safeLocale(val: any) {
+    const n = Number(val);
+    return isNaN(n) ? "0" : n.toLocaleString();
+  }
+  function safeFixed(val: any) {
+    const n = Number(val);
+    return isNaN(n) ? "0.00" : n.toFixed(2);
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -228,11 +238,11 @@ const PerformsTeam = () => {
                           <Badge variant="outline">{team.subid}</Badge>
                         </div>
                       </TableCell>
-                      <TableCell className="text-right">{team.clicks.toLocaleString()}</TableCell>
-                      <TableCell className="text-right">{team.unique.toLocaleString()}</TableCell>
-                      <TableCell className="text-right font-semibold">{team.conversions.toLocaleString()}</TableCell>
+                      <TableCell className="text-right">{safeLocale(team.clicks)}</TableCell>
+                      <TableCell className="text-right">{safeLocale(team.unique)}</TableCell>
+                      <TableCell className="text-right font-semibold">{safeLocale(team.conversions)}</TableCell>
                       <TableCell className="text-right font-semibold text-green-600 dark:text-green-400">
-                        ${team.earnings.toFixed(2)}
+                        ${safeFixed(team.earnings)}
                       </TableCell>
                     </TableRow>
                     
@@ -255,11 +265,11 @@ const PerformsTeam = () => {
                                 <span className="font-medium">{country.country}</span>
                               </div>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-primary">{Number(country.clicks).toLocaleString()}</TableCell>
-                            <TableCell className="text-right font-bold">{Number(country.unique).toLocaleString()}</TableCell>
-                            <TableCell className="text-right font-bold">{Number(country.conversions).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold text-primary">{safeLocale(country.clicks)}</TableCell>
+                            <TableCell className="text-right font-bold">{safeLocale(country.unique)}</TableCell>
+                            <TableCell className="text-right font-bold">{safeLocale(country.conversions)}</TableCell>
                             <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                              ${Number(country.earnings).toFixed(2)}
+                              ${safeFixed(country.earnings)}
                             </TableCell>
                           </TableRow>
                         ))}
