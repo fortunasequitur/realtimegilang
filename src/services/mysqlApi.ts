@@ -61,6 +61,16 @@ class MySQLApiService {
     }
   }
 
+  async getConversionsByDate(startDate: string, endDate: string): Promise<ConversionData[]> {
+    try {
+      const response = await fetch(`https://sobatdigital.online/api/conversions_json.php?start=${startDate}&end=${endDate}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching conversions by date:', error);
+      return [];
+    }
+  }
+
   getCountryFlag(countryCode: string): string {
     const flags: { [key: string]: string } = {
       'US': '🇺🇸', 'GB': '🇬🇧', 'DE': '🇩🇪', 'FR': '🇫🇷', 'IT': '🇮🇹',

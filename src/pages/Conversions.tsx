@@ -54,7 +54,7 @@ const Conversions = () => {
   const handleLoad = async () => {
     setIsLoading(true);
     try {
-      const data = await mysqlApi.getLiveConversions();
+      const data = await mysqlApi.getConversionsByDate(startDate, endDate);
       setConversions(data);
     } catch (error) {
       console.error('Error fetching conversions:', error);
