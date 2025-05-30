@@ -17,6 +17,10 @@ $res1 = $conn->query("
     WHERE DATE(timestamp) BETWEEN '$start' AND '$end'
     GROUP BY subsource
 ");
+if (!$res1) {
+    echo json_encode([]);
+    exit;
+}
 while($row = $res1->fetch_assoc()) {
     $team[$row['subid']] = [
         "subid" => $row['subid'],
@@ -33,6 +37,10 @@ $res2 = $conn->query("
     WHERE DATE(time) BETWEEN '$start' AND '$end'
     GROUP BY subid
 ");
+if (!$res2) {
+    echo json_encode([]);
+    exit;
+}
 while($row = $res2->fetch_assoc()) {
     $subid = $row['subid'];
     if (!isset($team[$subid])) {
@@ -77,6 +85,10 @@ while($row = $res3->fetch_assoc()) {
 // Gabungkan ke $team
 foreach ($team as &$row) {
     $row['countries'] = $countryBreakdown[$row['subid']] ?? [];
+}
+if (!is_array($team)) {
+    echo json_encode([]);
+    exit;
 }
 echo json_encode($team);
 ?> 

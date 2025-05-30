@@ -80,6 +80,9 @@ const PerformsTeam = () => {
   const currentWeekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'MMM dd');
   const currentWeekEnd = format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'MMM dd, yyyy');
 
+  // Tambahkan validasi agar tidak error jika teamData bukan array
+  const safeTeamData = Array.isArray(teamData) ? teamData : [];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -197,7 +200,7 @@ const PerformsTeam = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {teamData.map((team) => (
+                {safeTeamData.map((team) => (
                   <React.Fragment key={team.subid}>
                     <TableRow className="hover:bg-accent/50">
                       <TableCell className="text-center">
