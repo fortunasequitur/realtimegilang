@@ -95,32 +95,18 @@ export const realtimeApi = {
         throw new Error('Failed to fetch live clicks');
       }
       const data = await response.json();
-      
-      // Transform the API response to match our VisitData type and limit to 10 rows
-      return data
-        .slice(0, 10) // Only take the first 10 items
-        .map((item: any) => {
-          // Normalize country code to uppercase and ensure it's a valid code
-          let countryCode = (item.country || 'US').toUpperCase();
-          // If the country code is not in our list, default to 'US'
-          if (!countries.some(c => c.code === countryCode)) {
-            countryCode = 'US';
-          }
-          
-          return {
-            id: item.id || Math.random().toString(36).substr(2, 9),
-            timestamp: item.timestamp || new Date().toISOString(),
-            subsource: item.subsource || 'unknown',
-            ip: item.ip || generateRandomIP(),
-            country: countryCode,
-            os: item.os || 'Unknown',
-            referrer: item.referrer || 'Direct'
-          };
-        });
+      return data.slice(0, 10).map((item: any) => ({
+        id: item.id,
+        timestamp: item.timestamp,
+        subsource: item.subsource,
+        ip: item.ip,
+        country: item.country,
+        os: item.os,
+        referrer: item.referrer
+      }));
     } catch (error) {
       console.error('Error fetching live clicks from external API:', error);
-      // Fallback to mock data if API fails (already limited to 10 in the mock data)
-      return [...liveClicks];
+      return [];
     }
   },
 
@@ -131,36 +117,16 @@ export const realtimeApi = {
         throw new Error('Failed to fetch live conversions');
       }
       const data = await response.json();
-      // Ambil tanggal hari ini UTC (YYYY-MM-DD)
-      const todayUTC = new Date().toISOString().slice(0, 10);
-      // Filter dan transformasi data
-      return data
-        .filter((item: any) => {
-          const t = item.time || item.timestamp;
-          if (!t) return false;
-          // Ambil tanggal dari string waktu (YYYY-MM-DD)
-          const dateStr = t.slice(0, 10);
-          return dateStr === todayUTC;
-        })
-        .slice(0, 10)
-        .map((item: any) => {
-          let countryCode = (item.country || '').toUpperCase().trim();
-          // Hanya izinkan kode negara 2 huruf A-Z
-          if (!/^[A-Z]{2}$/.test(countryCode)) {
-            countryCode = '';
-          }
-          return {
-            id: item.id || Math.random().toString(36).substr(2, 9),
-            time: item.time || item.timestamp || new Date().toISOString(),
-            subid: item.subid || item.subsource || 'unknown',
-            payout: item.payout ? String(item.payout) : '0.00',
-            country: countryCode,
-          };
-        });
+      return data.slice(0, 10).map((item: any) => ({
+        id: item.id,
+        time: item.time,
+        subid: item.subid,
+        payout: item.payout,
+        country: item.country
+      }));
     } catch (error) {
       console.error('Error fetching live conversions from external API:', error);
-      // Fallback ke mock jika gagal
-      return [...liveConversions];
+      return [];
     }
   },
 
