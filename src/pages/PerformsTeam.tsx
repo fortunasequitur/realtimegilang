@@ -25,7 +25,7 @@ const PerformsTeam = () => {
   const fetchTeamData = async () => {
     setIsLoading(true);
     try {
-      const data = await mysqlApi.getTeamPerformance();
+      const data = await mysqlApi.getTeamPerformance(startDate, endDate);
       setTeamData(data);
     } catch (error) {
       console.error('Error fetching team data:', error);

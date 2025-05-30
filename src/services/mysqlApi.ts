@@ -51,9 +51,9 @@ class MySQLApiService {
     }
   }
 
-  async getTeamPerformance(): Promise<TeamPerformance[]> {
+  async getTeamPerformance(startDate: string, endDate: string): Promise<TeamPerformance[]> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/team_performance.php');
+      const response = await fetch(`https://sobatdigital.online/api/team_performance.php?start=${startDate}&end=${endDate}`);
       return await response.json();
     } catch (error) {
       console.error('Error fetching team performance:', error);

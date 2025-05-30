@@ -1,20 +1,82 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 $conn = new mysqli('localhost', 'sobf5627_gilang', '@Gilang123', 'sobf5627_realtimegilang');
 if ($conn->connect_error) {
     echo json_encode(['error' => 'Database connection failed']);
     exit;
 }
+$start = isset($_GET['start']) && $_GET['start'] !== '' ? $_GET['start'] : date('Y-m-d', strtotime('monday this week'));
+$end = isset($_GET['end']) && $_GET['end'] !== '' ? $_GET['end'] : date('Y-m-d', strtotime('sunday this week'));
+
 $team = [];
-$res = $conn->query("SELECT subid, COUNT(*) as conversions, SUM(payout) as earnings FROM conversions GROUP BY subid ORDER BY conversions DESC");
-$rank = 1;
-while($row = $res->fetch_assoc()) {
-    $team[] = [
-        "rank" => $rank++,
+// 1. Ambil clicks & unique dari visits
+$res1 = $conn->query("
+    SELECT subsource AS subid, COUNT(*) AS clicks, COUNT(DISTINCT ip) AS unique_visitors
+    FROM visits
+    WHERE DATE(timestamp) BETWEEN '$start' AND '$end'
+    GROUP BY subsource
+");
+while($row = $res1->fetch_assoc()) {
+    $team[$row['subid']] = [
         "subid" => $row['subid'],
-        "conversions" => intval($row['conversions']),
-        "earnings" => floatval($row['earnings'])
+        "clicks" => (int)$row['clicks'],
+        "unique" => (int)$row['unique_visitors'],
+        "conversions" => 0,
+        "earnings" => 0.0
     ];
+}
+// 2. Ambil conversions & earnings dari conversions
+$res2 = $conn->query("
+    SELECT subid, COUNT(*) AS conversions, SUM(payout) AS earnings
+    FROM conversions
+    WHERE DATE(time) BETWEEN '$start' AND '$end'
+    GROUP BY subid
+");
+while($row = $res2->fetch_assoc()) {
+    $subid = $row['subid'];
+    if (!isset($team[$subid])) {
+        $team[$subid] = [
+            "subid" => $subid,
+            "clicks" => 0,
+            "unique" => 0,
+            "conversions" => (int)$row['conversions'],
+            "earnings" => (float)$row['earnings']
+        ];
+    } else {
+        $team[$subid]['conversions'] = (int)$row['conversions'];
+        $team[$subid]['earnings'] = (float)$row['earnings'];
+    }
+}
+// 3. Ranking: conversions DESC, earnings DESC
+$team = array_values($team);
+usort($team, function($a, $b) {
+    if ($b['conversions'] === $a['conversions']) {
+        return $b['earnings'] <=> $a['earnings'];
+    }
+    return $b['conversions'] <=> $a['conversions'];
+});
+foreach ($team as $i => &$row) {
+    $row['rank'] = $i + 1;
+}
+// 4. Breakdown per negara
+$res3 = $conn->query("
+    SELECT subsource AS subid, country, COUNT(*) AS clicks, COUNT(DISTINCT ip) AS unique_visitors
+    FROM visits
+    WHERE DATE(timestamp) BETWEEN '$start' AND '$end'
+    GROUP BY subsource, country
+");
+$countryBreakdown = [];
+while($row = $res3->fetch_assoc()) {
+    $countryBreakdown[$row['subid']][] = [
+        "country" => $row['country'],
+        "clicks" => (int)$row['clicks'],
+        "unique" => (int)$row['unique_visitors']
+    ];
+}
+// Gabungkan ke $team
+foreach ($team as &$row) {
+    $row['countries'] = $countryBreakdown[$row['subid']] ?? [];
 }
 echo json_encode($team);
 ?> 
