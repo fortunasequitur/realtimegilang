@@ -237,23 +237,33 @@ const PerformsTeam = () => {
                     </TableRow>
                     
                     {expandedRows.has(team.subid) && (
-                      team.countries?.map((country) => (
-                        <TableRow key={country.country} className="bg-muted/30">
-                          <TableCell /> {/* Kosong untuk Rank */}
-                          <TableCell>
-                            <div className="flex items-center space-x-2">
-                              <CountryFlag countryCode={country.country} className="w-5 h-4" />
-                              <span className="font-medium">{country.country}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-right font-bold text-primary">{country.clicks}</TableCell>
-                          <TableCell className="text-right font-bold">{country.unique}</TableCell>
-                          <TableCell className="text-right font-bold">{country.conversions}</TableCell>
-                          <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                            ${country.earnings.toFixed(2)}
-                          </TableCell>
+                      <>
+                        <TableRow className="bg-muted/30">
+                          <TableHead />
+                          <TableHead>Country</TableHead>
+                          <TableHead className="text-right">Clicks</TableHead>
+                          <TableHead className="text-right">Unique</TableHead>
+                          <TableHead className="text-right">Conversions</TableHead>
+                          <TableHead className="text-right">Earnings</TableHead>
                         </TableRow>
-                      ))
+                        {team.countries?.map((country) => (
+                          <TableRow key={country.country} className="bg-muted/30">
+                            <TableCell />
+                            <TableCell>
+                              <div className="flex items-center space-x-2">
+                                <CountryFlag countryCode={country.country} className="w-5 h-4" />
+                                <span className="font-medium">{country.country}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-primary">{country.clicks ?? 0}</TableCell>
+                            <TableCell className="text-right font-bold">{country.unique ?? 0}</TableCell>
+                            <TableCell className="text-right font-bold">{country.conversions ?? 0}</TableCell>
+                            <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
+                              ${country.earnings ? country.earnings.toFixed(2) : "0.00"}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
                     )}
                   </React.Fragment>
                 ))}

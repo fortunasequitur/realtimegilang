@@ -67,7 +67,7 @@ usort($team, function($a, $b) {
 foreach ($team as $i => &$row) {
     $row['rank'] = $i + 1;
 }
-// 4. Breakdown per negara
+// 4. Breakdown clicks/unique per negara dari visits
 $res3 = $conn->query("
     SELECT subsource AS subid, country, COUNT(*) AS clicks, COUNT(DISTINCT ip) AS unique_visitors
     FROM visits
@@ -76,15 +76,40 @@ $res3 = $conn->query("
 ");
 $countryBreakdown = [];
 while($row = $res3->fetch_assoc()) {
-    $countryBreakdown[$row['subid']][] = [
+    $countryBreakdown[$row['subid']][$row['country']] = [
         "country" => $row['country'],
         "clicks" => (int)$row['clicks'],
-        "unique" => (int)$row['unique_visitors']
+        "unique" => (int)$row['unique_visitors'],
+        "conversions" => 0,
+        "earnings" => 0.0
     ];
+}
+// 5. Breakdown conversions/earnings per negara dari conversions
+$res4 = $conn->query("
+    SELECT subid, country, COUNT(*) AS conversions, SUM(payout) AS earnings
+    FROM conversions
+    WHERE DATE(time) BETWEEN '$start' AND '$end'
+    GROUP BY subid, country
+");
+while($row = $res4->fetch_assoc()) {
+    $subid = $row['subid'];
+    $country = $row['country'];
+    if (!isset($countryBreakdown[$subid][$country])) {
+        $countryBreakdown[$subid][$country] = [
+            "country" => $country,
+            "clicks" => 0,
+            "unique" => 0,
+            "conversions" => (int)$row['conversions'],
+            "earnings" => (float)$row['earnings']
+        ];
+    } else {
+        $countryBreakdown[$subid][$country]['conversions'] = (int)$row['conversions'];
+        $countryBreakdown[$subid][$country]['earnings'] = (float)$row['earnings'];
+    }
 }
 // Gabungkan ke $team
 foreach ($team as &$row) {
-    $row['countries'] = $countryBreakdown[$row['subid']] ?? [];
+    $row['countries'] = array_values($countryBreakdown[$row['subid']] ?? []);
 }
 if (!is_array($team)) {
     echo json_encode([]);
