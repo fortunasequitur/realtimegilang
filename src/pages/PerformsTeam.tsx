@@ -236,17 +236,17 @@ const PerformsTeam = () => {
                       </TableCell>
                     </TableRow>
                     
-                    {expandedRows.has(team.subid) && (
+                    {expandedRows.has(team.subid) && team.countries && team.countries.length > 0 && (
                       <>
                         <TableRow className="bg-muted/30">
-                          <TableHead />
-                          <TableHead>Country</TableHead>
-                          <TableHead className="text-right">Clicks</TableHead>
-                          <TableHead className="text-right">Unique</TableHead>
-                          <TableHead className="text-right">Conversions</TableHead>
-                          <TableHead className="text-right">Earnings</TableHead>
+                          <TableCell />
+                          <TableCell className="font-bold">Country</TableCell>
+                          <TableCell className="text-right font-bold">Clicks</TableCell>
+                          <TableCell className="text-right font-bold">Unique</TableCell>
+                          <TableCell className="text-right font-bold">Conversions</TableCell>
+                          <TableCell className="text-right font-bold">Earnings</TableCell>
                         </TableRow>
-                        {team.countries?.map((country) => (
+                        {team.countries.map((country) => (
                           <TableRow key={country.country} className="bg-muted/30">
                             <TableCell />
                             <TableCell>
@@ -255,11 +255,11 @@ const PerformsTeam = () => {
                                 <span className="font-medium">{country.country}</span>
                               </div>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-primary">{country.clicks ?? 0}</TableCell>
-                            <TableCell className="text-right font-bold">{country.unique ?? 0}</TableCell>
-                            <TableCell className="text-right font-bold">{country.conversions ?? 0}</TableCell>
+                            <TableCell className="text-right font-bold text-primary">{(country.clicks ?? 0).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold">{(country.unique ?? 0).toLocaleString()}</TableCell>
+                            <TableCell className="text-right font-bold">{(country.conversions ?? 0).toLocaleString()}</TableCell>
                             <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                              ${country.earnings ? country.earnings.toFixed(2) : "0.00"}
+                              ${(country.earnings ?? 0).toFixed(2)}
                             </TableCell>
                           </TableRow>
                         ))}
