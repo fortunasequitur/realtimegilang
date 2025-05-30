@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { realtimeApi } from '@/services/realtimeApi';
+import { mysqlApi } from '@/services/mysqlApi';
 import { StatsSummary, StatsData } from '@/types';
 import { format, subDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 
@@ -43,7 +42,7 @@ const Statistics = () => {
 
   const fetchSummary = async () => {
     try {
-      const summaryData = await realtimeApi.getStatsSummary();
+      const summaryData = await mysqlApi.getStatsSummary();
       setSummary(summaryData);
     } catch (error) {
       console.error('Error fetching summary:', error);
@@ -83,7 +82,7 @@ const Statistics = () => {
   const handleLoad = async () => {
     setIsLoading(true);
     try {
-      const data = await realtimeApi.getStatsData(startDate, endDate);
+      const data = await mysqlApi.getStatsData(startDate, endDate);
       setStatsData(data);
       calculateTotalsFromData(data);
     } catch (error) {

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { realtimeApi } from '@/services/realtimeApi';
+import { mysqlApi } from '@/services/mysqlApi';
 import { TeamPerformance, CountryBreakdown } from '@/types';
 import { format, startOfWeek, endOfWeek, subDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { CountryFlag } from '@/components/CountryFlag';
@@ -25,7 +25,7 @@ const PerformsTeam = () => {
   const fetchTeamData = async () => {
     setIsLoading(true);
     try {
-      const data = await realtimeApi.getTeamPerformance();
+      const data = await mysqlApi.getTeamPerformance();
       setTeamData(data);
     } catch (error) {
       console.error('Error fetching team data:', error);
