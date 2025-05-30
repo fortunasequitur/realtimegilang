@@ -42,8 +42,13 @@ class MySQLApiService {
   }
 
   async getStatsData(startDate: string, endDate: string): Promise<StatsData[]> {
-    // Jika ada endpoint khusus, bisa diubah di sini
-    return [];
+    try {
+      const response = await fetch(`https://sobatdigital.online/api/stats_json.php?start=${startDate}&end=${endDate}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching stats data:', error);
+      return [];
+    }
   }
 
   async getTeamPerformance(): Promise<TeamPerformance[]> {
