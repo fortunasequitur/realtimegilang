@@ -17,7 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      navigate('/live-performs', { replace: true });
     }
   }, [user, navigate]);
 
@@ -28,7 +28,7 @@ const Login = () => {
     try {
       const success = await login(username, password);
       if (success) {
-        navigate('/', { replace: true });
+        navigate('/live-performs', { replace: true });
       } else {
         toast({
           title: "Login Failed",
@@ -52,10 +52,10 @@ const Login = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Statistics Dashboard
+            GILANG TEAM
           </CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access the dashboard
+            Welcome Back
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -81,9 +81,6 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </div>
-            <div className="text-sm text-muted-foreground text-center">
-              Demo credentials: admin / admin
             </div>
           </CardContent>
           <CardFooter>

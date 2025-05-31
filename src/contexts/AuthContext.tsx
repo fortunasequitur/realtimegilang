@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,8 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string): Promise<boolean> => {
     // Simple hardcoded authentication
-    if (username === 'admin' && password === 'admin') {
-      const userData = { username: 'admin', role: 'administrator' };
+    if (username === 'gilang' && password === 'team') {
+      const userData = { username: 'gilang', role: 'administrator' };
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));
       return true;
