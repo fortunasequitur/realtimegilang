@@ -38,6 +38,15 @@ const LivePerforms = () => {
     return format(new Date(timestamp), 'HH:mm:ss');
   };
 
+  // Filter conversions hanya untuk hari ini UTC+0
+  const todayUTC = new Date();
+  const todayUTCString = todayUTC.toISOString().slice(0, 10); // yyyy-mm-dd
+  const filteredConversions = liveConversions.filter((c) => {
+    // c.time format: yyyy-mm-dd HH:mm:ss atau ISO
+    const dateStr = c.time ? c.time.slice(0, 10) : '';
+    return dateStr === todayUTCString;
+  });
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-96">
@@ -159,7 +168,7 @@ const LivePerforms = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="text-lg font-bold text-green-600 dark:text-green-400">
                 Total Earning Today: $
-                {liveConversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
+                {filteredConversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
               </div>
             </div>
             <Table>
@@ -173,14 +182,14 @@ const LivePerforms = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {liveConversions.length === 0 ? (
+                {filteredConversions.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center text-muted-foreground text-xs py-4">
                       No recent conversions
                     </TableCell>
                   </TableRow>
                 ) : (
-                  liveConversions.map((conversion) => (
+                  filteredConversions.map((conversion) => (
                     <TableRow key={conversion.id} className="h-8">
                       <TableCell className="font-mono text-xs py-1 px-2">
                         {formatTime(conversion.time)}
