@@ -104,8 +104,8 @@ const LivePerforms = () => {
                       </TableCell>
                       <TableCell className="py-1 px-2">
                         <img 
-                          src={realtimeApi.getOSIcon(click.os)}
-                          alt={click.os}
+                          src={realtimeApi.getOSIcon(click.user_agent)}
+                          alt={click.user_agent}
                           className="w-5 h-5 object-contain"
                           onError={(e) => {
                             const imgElement = e.target as HTMLImageElement;
@@ -119,8 +119,8 @@ const LivePerforms = () => {
                       </TableCell>
                       <TableCell className="py-1 px-2">
                         <img 
-                          src={realtimeApi.getReferrerIcon(click.referrer)}
-                          alt={click.referrer}
+                          src={realtimeApi.getReferrerIcon(click.referer)}
+                          alt={click.referer}
                           className="w-5 h-5 object-contain"
                           onError={(e) => {
                             const imgElement = e.target as HTMLImageElement;
