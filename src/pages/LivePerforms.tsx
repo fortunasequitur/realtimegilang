@@ -158,41 +158,41 @@ const LivePerforms = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Network</TableHead>
-                  <TableHead>Geo</TableHead>
-                  <TableHead>Payouts</TableHead>
-                  <TableHead>SUB ID</TableHead>
+                  <TableHead className="h-8 px-2 text-xs">Time</TableHead>
+                  <TableHead className="h-8 px-2 text-xs">Network</TableHead>
+                  <TableHead className="h-8 px-2 text-xs">Geo</TableHead>
+                  <TableHead className="h-8 px-2 text-xs">Payouts</TableHead>
+                  <TableHead className="h-8 px-2 text-xs">SUB ID</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {liveConversions.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-muted-foreground">
+                    <TableCell colSpan={5} className="text-center text-muted-foreground text-xs py-4">
                       No recent conversions
                     </TableCell>
                   </TableRow>
                 ) : (
                   liveConversions.map((conversion) => (
-                    <TableRow key={conversion.id}>
-                      <TableCell className="font-mono text-sm">
+                    <TableRow key={conversion.id} className="h-8">
+                      <TableCell className="font-mono text-xs py-1 px-2">
                         {formatTime(conversion.time)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-1 px-2">
                         <Badge variant="outline" className="text-xs">TRAFEE</Badge>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-1 px-2">
                         <CountryFlag 
                           countryCode={conversion.country} 
                           className="w-6 h-5"
                         />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-1 px-2">
                         <span className="font-semibold text-green-600 dark:text-green-400">
                           ${conversion.payout}
                         </span>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="py-1 px-2">
                         <Badge variant="secondary">{conversion.subid}</Badge>
                       </TableCell>
                     </TableRow>
