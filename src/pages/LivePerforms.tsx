@@ -157,7 +157,7 @@ const LivePerforms = () => {
           <div className="overflow-x-auto">
             {/* Total Payouts di pojok kiri atas */}
             <div className="flex items-center justify-between mb-2">
-              <div className="text-xs font-bold text-green-600 dark:text-green-400">
+              <div className="text-lg font-bold text-green-600 dark:text-green-400">
                 Total Earning Today: $
                 {liveConversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
               </div>
