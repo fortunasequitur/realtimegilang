@@ -215,24 +215,25 @@ export const realtimeApi = {
     return country ? country.flag : '🌍';
   },
 
-  getOSIcon: (os: string): string => {
-    if (!os) return '/images/window.svg';
-    const osLower = os.toLowerCase();
-    if (osLower.includes('android')) return '/images/android.svg';
-    if (osLower.includes('mac')) return '/images/mac.svg';
-    if (osLower.includes('ios') || osLower.includes('apple')) return '/images/apple.svg';
-    if (osLower.includes('win')) return '/images/window.svg';
+  getOSIcon: (useragent: string): string => {
+    if (!useragent) return '/images/window.svg';
+    const ua = useragent.toLowerCase();
+    if (ua.includes('android')) return '/images/android.svg';
+    if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ios') || ua.includes('apple')) return '/images/apple.svg';
+    if (ua.includes('mac')) return '/images/mac.svg';
+    if (ua.includes('win')) return '/images/window.svg';
+    if (ua.includes('linux')) return '/images/window.svg'; // fallback, bisa diganti jika ada icon linux
     return '/images/window.svg';
   },
 
   getReferrerIcon: (referrer: string): string => {
     if (!referrer) return '/images/socials/browser.svg';
-    const refLower = referrer.toLowerCase();
-    if (refLower.includes('facebook')) return '/images/socials/facebook.svg';
-    if (refLower.includes('instagram')) return '/images/socials/instagram.svg';
-    if (refLower.includes('threads')) return '/images/socials/threads.svg';
-    if (refLower === 'x') return '/images/socials/x.svg';
-    if (refLower.includes('direct')) return '/images/socials/direct.svg';
+    const ref = referrer.toLowerCase();
+    if (ref.includes('facebook.com')) return '/images/socials/facebook.svg';
+    if (ref.includes('instagram.com')) return '/images/socials/instagram.svg';
+    if (ref.includes('threads.net')) return '/images/socials/threads.svg';
+    if (ref.includes('twitter.com') || ref.includes('x.com')) return '/images/socials/x.svg';
+    if (ref === '' || ref === '-' || ref === 'direct') return '/images/socials/direct.svg';
     return '/images/socials/browser.svg';
   },
 };
