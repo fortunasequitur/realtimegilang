@@ -216,24 +216,23 @@ export const realtimeApi = {
   },
 
   getOSIcon: (os: string): string => {
-    const icons: { [key: string]: string } = {
-      'Windows': '/images/window.svg',
-      'MacOS': '/images/mac.svg',
-      'Android': '/images/android.svg',
-      'iOS': '/images/apple.svg',
-      'Linux': '🐧', // Tetap menggunakan emoji untuk Linux karena belum ada SVG-nya
-    };
-    return icons[os] || '💻';
+    if (!os) return '/images/window.svg';
+    const osLower = os.toLowerCase();
+    if (osLower.includes('android')) return '/images/android.svg';
+    if (osLower.includes('mac')) return '/images/mac.svg';
+    if (osLower.includes('ios') || osLower.includes('apple')) return '/images/apple.svg';
+    if (osLower.includes('win')) return '/images/window.svg';
+    return '/images/window.svg';
   },
 
   getReferrerIcon: (referrer: string): string => {
-    const icons: { [key: string]: string } = {
-      'Facebook': '/images/socials/facebook.svg',
-      'Instagram': '/images/socials/instagram.svg',
-      'Threads': '/images/socials/threads.svg',
-      'X': '❌', // Tetap menggunakan emoji untuk X karena belum ada SVG-nya
-      'Direct': '/images/socials/browser.svg',
-    };
-    return icons[referrer] || '/images/socials/browser.svg';
+    if (!referrer) return '/images/socials/browser.svg';
+    const refLower = referrer.toLowerCase();
+    if (refLower.includes('facebook')) return '/images/socials/facebook.svg';
+    if (refLower.includes('instagram')) return '/images/socials/instagram.svg';
+    if (refLower.includes('threads')) return '/images/socials/threads.svg';
+    if (refLower === 'x') return '/images/socials/x.svg';
+    if (refLower.includes('direct')) return '/images/socials/direct.svg';
+    return '/images/socials/browser.svg';
   },
 };
