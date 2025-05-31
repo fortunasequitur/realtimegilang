@@ -277,6 +277,16 @@ const PerformsTeam = () => {
                     )}
                   </React.Fragment>
                 ))}
+                {/* Summary Row */}
+                <TableRow className="bg-muted font-bold">
+                  <TableCell colSpan={4} className="text-right">Total:</TableCell>
+                  <TableCell className="text-right">
+                    {safeLocale(safeTeamData.reduce((sum, team) => sum + team.conversions, 0))}
+                  </TableCell>
+                  <TableCell className="text-right text-green-600 dark:text-green-400">
+                    ${safeFixed(safeTeamData.reduce((sum, team) => sum + team.earnings, 0))}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </div>
