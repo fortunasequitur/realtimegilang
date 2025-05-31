@@ -155,3 +155,9 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+html, body, #root {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
