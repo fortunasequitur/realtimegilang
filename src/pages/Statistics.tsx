@@ -217,8 +217,8 @@ const Statistics = () => {
           {/* <CardDescription>Detailed breakdown per SUB ID</CardDescription> */}
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto w-full">
+            <Table className="min-w-[700px] w-full">
               <TableHeader>
                 <TableRow>
                   <TableHead>SUB ID</TableHead>

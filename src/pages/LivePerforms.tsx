@@ -75,8 +75,8 @@ const LivePerforms = () => {
           <CardDescription className="text-sm">Berdasarkan Waktu UTC +0</CardDescription>
         </CardHeader>
         <CardContent className="p-3">
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto w-full">
+            <Table className="min-w-[700px] w-full">
               <TableHeader>
                 <TableRow>
                   <TableHead className="h-8 px-2 text-xs">Time</TableHead>
