@@ -4,8 +4,8 @@ export interface VisitData {
   subsource: string;
   ip: string;
   country: string;
-  os: string;
-  referrer: string;
+  user_agent: string;
+  referer: string;
 }
 
 export interface ConversionData {

@@ -39,8 +39,8 @@ const generateRandomVisit = (): VisitData => {
     subsource: subId,
     ip: generateRandomIP(),
     country: country.code,
-    os: os,
-    referrer: referrer,
+    user_agent: os,
+    referer: referrer,
   };
 };
 
@@ -101,8 +101,8 @@ export const realtimeApi = {
         subsource: item.subsource,
         ip: item.ip,
         country: item.country,
-        os: item.os,
-        referrer: item.referrer
+        user_agent: item.user_agent,
+        referer: item.referer,
       }));
     } catch (error) {
       console.error('Error fetching live clicks from external API:', error);
