@@ -292,23 +292,26 @@ const PerformsTeam = () => {
                           <TableCell className="text-right font-bold">Conversions</TableCell>
                           <TableCell className="text-right font-bold">Earnings</TableCell>
                         </TableRow>
-                        {team.countries.map((country) => (
-                          <TableRow key={country.country} className="bg-muted/30">
-                            <TableCell />
-                            <TableCell>
-                              <div className="flex items-center space-x-2">
-                                <CountryFlag countryCode={country.country} className="w-5 h-4" />
-                                <span className="font-medium">{country.country}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right font-bold text-primary">{safeLocale(country.clicks)}</TableCell>
-                            <TableCell className="text-right font-bold">{safeLocale(country.unique)}</TableCell>
-                            <TableCell className="text-right font-bold">{safeLocale(country.conversions)}</TableCell>
-                            <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
-                              ${safeFixed(country.earnings)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                        {team.countries
+                          .slice() // copy array agar tidak mutate
+                          .sort((a, b) => b.conversions - a.conversions)
+                          .map((country) => (
+                            <TableRow key={country.country} className="bg-muted/30">
+                              <TableCell />
+                              <TableCell>
+                                <div className="flex items-center space-x-2">
+                                  <CountryFlag countryCode={country.country} className="w-5 h-4" />
+                                  <span className="font-medium">{country.country}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell className="text-right font-bold text-primary">{safeLocale(country.clicks)}</TableCell>
+                              <TableCell className="text-right font-bold">{safeLocale(country.unique)}</TableCell>
+                              <TableCell className="text-right font-bold">{safeLocale(country.conversions)}</TableCell>
+                              <TableCell className="text-right font-bold text-green-600 dark:text-green-400">
+                                ${safeFixed(country.earnings)}
+                              </TableCell>
+                            </TableRow>
+                          ))}
                       </>
                     )}
                   </React.Fragment>
