@@ -145,7 +145,6 @@ const Statistics = () => {
       <Card>
         <CardHeader>
           <CardTitle>Date Filter</CardTitle>
-          <CardDescription>Select date range to view statistics</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">

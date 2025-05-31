@@ -164,7 +164,6 @@ const PerformsTeam = () => {
       <Card>
         <CardHeader>
           <CardTitle>Date Filter</CardTitle>
-          <CardDescription>Select date range to view team performance</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
@@ -226,7 +225,7 @@ const PerformsTeam = () => {
         <CardHeader>
           <CardTitle>Team Performance</CardTitle>
           <CardDescription>
-            Team performance ranked by conversions (Monday - Sunday UTC+0)
+            Data Terhitung 1 Minggu (Senin - Minggu) Waktu UTC+0
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -16,6 +16,7 @@ const Conversions = () => {
   const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [preset, setPreset] = useState('today');
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
     handleLoad();
@@ -67,40 +68,49 @@ const Conversions = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Conversions</h1>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowSummary(!showSummary)}
+          className="text-sm whitespace-nowrap"
+        >
+          {showSummary ? 'Hide Summary' : 'Show Summary'}
+        </Button>
       </div>
 
-      {/* Conversion Summary - Moved to top */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Conversion Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-accent rounded-lg">
-              <div className="text-2xl font-bold text-primary">
-                {conversions.length}
+      {/* Conversion Summary - Now toggleable */}
+      {showSummary && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Conversion Summary</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-accent rounded-lg">
+                <div className="text-2xl font-bold text-primary">
+                  {conversions.length}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Total Conversions
+                </div>
               </div>
-              <div className="text-sm text-muted-foreground">
-                Total Conversions
+              <div className="text-center p-4 bg-accent rounded-lg">
+                <div className="text-2xl font-bold text-green-600">
+                  ${conversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Total Payouts
+                </div>
               </div>
             </div>
-            <div className="text-center p-4 bg-accent rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
-                ${conversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Total Payouts
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Date Filter */}
       <Card>
         <CardHeader>
           <CardTitle>Date Filter</CardTitle>
-          <CardDescription>Select date range to view conversions</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
@@ -156,9 +166,7 @@ const Conversions = () => {
       <Card>
         <CardHeader>
           <CardTitle>Conversions Data</CardTitle>
-          <CardDescription>
-            Conversion events with detailed information
-          </CardDescription>
+          {/* <CardDescription>Conversion events with detailed information</CardDescription> */}
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -179,32 +187,41 @@ const Conversions = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  conversions.map((conversion) => (
-                    <TableRow key={conversion.id}>
-                      <TableCell className="font-mono text-sm">
-                        {format(new Date(conversion.time), 'yyyy-MM-dd HH:mm:ss')}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">{conversion.subid}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <CountryFlag 
-                            countryCode={conversion.country}
-                            className="w-6 h-5"
-                          />
-                          <span className="text-sm text-muted-foreground">
-                            {conversion.country}
+                  <>
+                    {conversions.map((conversion) => (
+                      <TableRow key={conversion.id}>
+                        <TableCell className="font-mono text-sm">
+                          {format(new Date(conversion.time), 'yyyy-MM-dd HH:mm:ss')}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="secondary">{conversion.subid}</Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <CountryFlag 
+                              countryCode={conversion.country}
+                              className="w-6 h-5"
+                            />
+                            <span className="text-sm text-muted-foreground">
+                              {conversion.country}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <span className="font-semibold text-green-600 dark:text-green-400">
+                            ${conversion.payout}
                           </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <span className="font-semibold text-green-600 dark:text-green-400">
-                          ${conversion.payout}
-                        </span>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {/* Total Row */}
+                    <TableRow className="bg-muted font-bold">
+                      <TableCell colSpan={3} className="text-right">Total:</TableCell>
+                      <TableCell className="text-right text-green-600 dark:text-green-400">
+                        ${conversions.reduce((sum, c) => sum + parseFloat(c.payout), 0).toFixed(2)}
                       </TableCell>
                     </TableRow>
-                  ))
+                  </>
                 )}
               </TableBody>
             </Table>
