@@ -116,7 +116,7 @@ const PerformsTeam = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              ${teamData.reduce((sum, team) => sum + team.earnings, 0).toFixed(2)}
+              ${safeTeamData.reduce((sum, team) => sum + (Number(team.earnings) || 0), 0).toFixed(2)}
             </div>
             <div className="text-sm text-muted-foreground">This week</div>
           </CardContent>
@@ -128,7 +128,7 @@ const PerformsTeam = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {teamData.reduce((sum, team) => sum + team.conversions, 0).toLocaleString()}
+              {safeTeamData.reduce((sum, team) => sum + (Number(team.conversions) || 0), 0).toLocaleString()}
             </div>
             <div className="text-sm text-muted-foreground">All team members</div>
           </CardContent>
@@ -287,10 +287,10 @@ const PerformsTeam = () => {
                 <TableRow className="bg-muted font-bold">
                   <TableCell colSpan={4} className="text-right">Total:</TableCell>
                   <TableCell className="text-right">
-                    {safeLocale(safeTeamData.reduce((sum, team) => sum + team.conversions, 0))}
+                    {safeLocale(safeTeamData.reduce((sum, team) => sum + (Number(team.conversions) || 0), 0))}
                   </TableCell>
                   <TableCell className="text-right text-green-600 dark:text-green-400">
-                    ${safeFixed(safeTeamData.reduce((sum, team) => sum + team.earnings, 0))}
+                    ${safeFixed(safeTeamData.reduce((sum, team) => sum + (Number(team.earnings) || 0), 0))}
                   </TableCell>
                 </TableRow>
               </TableBody>
