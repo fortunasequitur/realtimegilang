@@ -17,6 +17,7 @@ const PerformsTeam = () => {
   const [startDate, setStartDate] = useState(format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'));
   const [endDate, setEndDate] = useState(format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd'));
   const [preset, setPreset] = useState('thisweek');
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
     fetchTeamData();
@@ -101,39 +102,50 @@ const PerformsTeam = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">Performs Team</h1>
-        <Badge variant="outline" className="text-sm">
-          Week: {currentWeekStart} - {currentWeekEnd}
-        </Badge>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowSummary(!showSummary)}
+            className="text-sm whitespace-nowrap"
+          >
+            {showSummary ? 'Hide Summary' : 'Show Summary'}
+          </Button>
+          <Badge variant="outline" className="text-sm">
+            Week: {currentWeekStart} - {currentWeekEnd}
+          </Badge>
+        </div>
       </div>
 
-      {/* Summary Cards - Moved to top */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Team Earnings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              ${safeTeamData.reduce((sum, team) => sum + (Number(team.earnings) || 0), 0).toFixed(2)}
-            </div>
-            <div className="text-sm text-muted-foreground">This week</div>
-          </CardContent>
-        </Card>
+      {showSummary && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Total Team Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                ${safeTeamData.reduce((sum, team) => sum + (Number(team.earnings) || 0), 0).toFixed(2)}
+              </div>
+              <div className="text-sm text-muted-foreground">This week</div>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Conversions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {safeTeamData.reduce((sum, team) => sum + (Number(team.conversions) || 0), 0).toLocaleString()}
-            </div>
-            <div className="text-sm text-muted-foreground">All team members</div>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">Total Conversions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {safeTeamData.reduce((sum, team) => sum + (Number(team.conversions) || 0), 0).toLocaleString()}
+              </div>
+              <div className="text-sm text-muted-foreground">All team members</div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Date Filter */}
       <Card>
