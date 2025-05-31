@@ -147,11 +147,11 @@ const LivePerforms = () => {
       {/* Recent Conversions Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="text-lg flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             Live Conversions Today
           </CardTitle>
-          <CardDescription>Berdasarkan Waktu UTC +0</CardDescription>
+          <CardDescription className="text-sm">Berdasarkan Waktu UTC +0</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
