@@ -22,7 +22,11 @@ if (!$res1) {
     echo json_encode([]);
     exit;
 }
-error_log("Visits query result: " . json_encode($res1->fetch_all(MYSQLI_ASSOC)));
+// Simpan hasil query untuk logging
+$visits_data = $res1->fetch_all(MYSQLI_ASSOC);
+error_log("Visits query result: " . json_encode($visits_data));
+// Reset pointer hasil query
+$res1->data_seek(0);
 while($row = $res1->fetch_assoc()) {
     $team[$row['subid']] = [
         "subid" => $row['subid'],
@@ -44,7 +48,11 @@ if (!$res2) {
     echo json_encode([]);
     exit;
 }
-error_log("Conversions query result: " . json_encode($res2->fetch_all(MYSQLI_ASSOC)));
+// Simpan hasil query untuk logging
+$conversions_data = $res2->fetch_all(MYSQLI_ASSOC);
+error_log("Conversions query result: " . json_encode($conversions_data));
+// Reset pointer hasil query
+$res2->data_seek(0);
 while($row = $res2->fetch_assoc()) {
     $subid = $row['subid'];
     if (!isset($team[$subid])) {
