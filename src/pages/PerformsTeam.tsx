@@ -192,6 +192,7 @@ const PerformsTeam = () => {
                 value={startDate}
                 onChange={(e) => handleDateChange('start', e.target.value)}
                 max={endDate}
+                style={{ cursor: "pointer" }}
               />
             </div>
 
@@ -202,6 +203,7 @@ const PerformsTeam = () => {
                 value={endDate}
                 onChange={(e) => handleDateChange('end', e.target.value)}
                 min={startDate}
+                style={{ cursor: "pointer" }}
               />
             </div>
 
