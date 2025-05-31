@@ -16,10 +16,14 @@ const Statistics = () => {
   const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [preset, setPreset] = useState('today');
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
+    setPreset('today');
+    const today = new Date();
+    setStartDate(format(today, 'yyyy-MM-dd'));
+    setEndDate(format(today, 'yyyy-MM-dd'));
     fetchSummary();
-    // Auto-load today's data
     handleLoad();
   }, []);
 
@@ -94,10 +98,20 @@ const Statistics = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Statistics</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Statistics</h1>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowSummary(!showSummary)}
+          className="text-sm whitespace-nowrap"
+        >
+          {showSummary ? 'Hide Summary' : 'Show Summary'}
+        </Button>
+      </div>
 
-      {/* Summary Cards */}
-      {summary && (
+      {/* Summary Cards - Now toggleable */}
+      {showSummary && summary && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -199,8 +213,8 @@ const Statistics = () => {
       {/* Statistics Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Statistics by SUB ID</CardTitle>
-          <CardDescription>Detailed breakdown per SUB ID</CardDescription>
+          <CardTitle>Statistics Traffic</CardTitle>
+          {/* <CardDescription>Detailed breakdown per SUB ID</CardDescription> */}
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -222,19 +236,29 @@ const Statistics = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  statsData.map((stat) => (
-                    <TableRow key={stat.subid}>
-                      <TableCell>
-                        <Badge variant="outline">{stat.subid}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">{stat.clicks.toLocaleString()}</TableCell>
-                      <TableCell className="text-right">{stat.unique.toLocaleString()}</TableCell>
-                      <TableCell className="text-right">{stat.conversions.toLocaleString()}</TableCell>
-                      <TableCell className="text-right font-semibold">
-                        ${stat.earnings.toFixed(2)}
-                      </TableCell>
+                  <>
+                    {statsData.map((stat) => (
+                      <TableRow key={stat.subid}>
+                        <TableCell>
+                          <Badge variant="outline">{stat.subid}</Badge>
+                        </TableCell>
+                        <TableCell className="text-right">{stat.clicks.toLocaleString()}</TableCell>
+                        <TableCell className="text-right">{stat.unique.toLocaleString()}</TableCell>
+                        <TableCell className="text-right">{stat.conversions.toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-semibold">
+                          ${stat.earnings.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {/* Total Row */}
+                    <TableRow className="bg-muted font-bold">
+                      <TableCell className="text-right">Total:</TableCell>
+                      <TableCell className="text-right">{statsData.reduce((sum, s) => sum + s.clicks, 0).toLocaleString()}</TableCell>
+                      <TableCell className="text-right">{statsData.reduce((sum, s) => sum + s.unique, 0).toLocaleString()}</TableCell>
+                      <TableCell className="text-right">{statsData.reduce((sum, s) => sum + s.conversions, 0).toLocaleString()}</TableCell>
+                      <TableCell className="text-right text-green-600 dark:text-green-400">${statsData.reduce((sum, s) => sum + s.earnings, 0).toFixed(2)}</TableCell>
                     </TableRow>
-                  ))
+                  </>
                 )}
               </TableBody>
             </Table>
