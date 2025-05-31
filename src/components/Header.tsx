@@ -45,12 +45,12 @@ const Header = () => {
           {/* Logo Center */}
           <Link to="/" className="text-lg font-bold text-primary text-center w-full">GILANG TEAM</Link>
           {/* Menu Horizontal */}
-          <nav className="w-full flex">
+          <nav className="w-full flex overflow-x-auto scrollbar-hide whitespace-nowrap">
             {mobileNavigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={`flex-1 text-center px-0 py-2 rounded-none text-sm font-medium transition-colors ${
+                className={`inline-block min-w-max text-center px-4 py-2 text-sm font-medium transition-colors ${
                   location.pathname === item.href
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
