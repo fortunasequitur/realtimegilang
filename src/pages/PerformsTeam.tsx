@@ -43,6 +43,9 @@ const PerformsTeam = () => {
     const today = new Date();
     
     switch (value) {
+      case 'custom':
+        // Don't change dates when custom is selected
+        break;
       case 'today':
         setStartDate(format(today, 'yyyy-MM-dd'));
         setEndDate(format(today, 'yyyy-MM-dd'));
@@ -65,6 +68,16 @@ const PerformsTeam = () => {
         setEndDate(format(endOfMonth(lastMonth), 'yyyy-MM-dd'));
         break;
     }
+  };
+
+  const handleDateChange = (type: 'start' | 'end', value: string) => {
+    if (type === 'start') {
+      setStartDate(value);
+    } else {
+      setEndDate(value);
+    }
+    // Set preset to custom when dates are manually changed
+    setPreset('custom');
   };
 
   const handleLoad = async () => {
@@ -162,6 +175,7 @@ const PerformsTeam = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="custom">Custom Range</SelectItem>
                   <SelectItem value="today">Today</SelectItem>
                   <SelectItem value="thisweek">This Week</SelectItem>
                   <SelectItem value="last7days">Last 7 Days</SelectItem>
@@ -176,7 +190,8 @@ const PerformsTeam = () => {
               <Input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => handleDateChange('start', e.target.value)}
+                max={endDate}
               />
             </div>
 
@@ -185,7 +200,8 @@ const PerformsTeam = () => {
               <Input
                 type="date"
                 value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                onChange={(e) => handleDateChange('end', e.target.value)}
+                min={startDate}
               />
             </div>
 
