@@ -99,3 +99,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Agar icon kalender pada input date terlihat di dark mode */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
