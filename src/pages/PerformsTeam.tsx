@@ -26,6 +26,9 @@ const PerformsTeam = () => {
     setIsLoading(true);
     try {
       const data = await mysqlApi.getTeamPerformance(startDate, endDate);
+      console.log('Received team data:', data);
+      console.log('Total conversions:', data.reduce((sum, team) => sum + team.conversions, 0));
+      console.log('Total earnings:', data.reduce((sum, team) => sum + team.earnings, 0));
       setTeamData(data);
     } catch (error) {
       console.error('Error fetching team data:', error);
@@ -82,6 +85,9 @@ const PerformsTeam = () => {
 
   // Tambahkan validasi agar tidak error jika teamData bukan array
   const safeTeamData = Array.isArray(teamData) ? teamData : [];
+  console.log('Current safeTeamData:', safeTeamData);
+  console.log('Current total conversions:', safeTeamData.reduce((sum, team) => sum + team.conversions, 0));
+  console.log('Current total earnings:', safeTeamData.reduce((sum, team) => sum + team.earnings, 0));
 
   // Fungsi aman untuk render angka
   function safeLocale(val: any) {

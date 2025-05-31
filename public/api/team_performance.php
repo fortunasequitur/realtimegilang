@@ -18,9 +18,11 @@ $res1 = $conn->query("
     GROUP BY subsource
 ");
 if (!$res1) {
+    error_log("Error in visits query: " . $conn->error);
     echo json_encode([]);
     exit;
 }
+error_log("Visits query result: " . json_encode($res1->fetch_all(MYSQLI_ASSOC)));
 while($row = $res1->fetch_assoc()) {
     $team[$row['subid']] = [
         "subid" => $row['subid'],
@@ -38,9 +40,11 @@ $res2 = $conn->query("
     GROUP BY subid
 ");
 if (!$res2) {
+    error_log("Error in conversions query: " . $conn->error);
     echo json_encode([]);
     exit;
 }
+error_log("Conversions query result: " . json_encode($res2->fetch_all(MYSQLI_ASSOC)));
 while($row = $res2->fetch_assoc()) {
     $subid = $row['subid'];
     if (!isset($team[$subid])) {
@@ -67,6 +71,12 @@ usort($team, function($a, $b) {
 foreach ($team as $i => &$row) {
     $row['rank'] = $i + 1;
 }
+
+// Debug logging
+error_log("Team data before sending: " . json_encode($team));
+error_log("Total conversions: " . array_reduce($team, function($sum, $item) { return $sum + $item['conversions']; }, 0));
+error_log("Total earnings: " . array_reduce($team, function($sum, $item) { return $sum + $item['earnings']; }, 0));
+
 // 4. Breakdown clicks/unique per negara dari visits
 $res3 = $conn->query("
     SELECT subsource AS subid, country, COUNT(*) AS clicks, COUNT(DISTINCT ip) AS unique_visitors
