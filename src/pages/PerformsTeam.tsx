@@ -10,6 +10,11 @@ import { TeamPerformance, CountryBreakdown } from '@/types';
 import { format, startOfWeek, endOfWeek, subDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { CountryFlag } from '@/components/CountryFlag';
 
+function getTodayUTCString() {
+  const now = new Date();
+  return now.toISOString().slice(0, 10); // yyyy-mm-dd
+}
+
 const PerformsTeam = () => {
   const [teamData, setTeamData] = useState<TeamPerformance[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,33 +45,54 @@ const PerformsTeam = () => {
 
   const handlePresetChange = (value: string) => {
     setPreset(value);
-    const today = new Date();
-    
+    const todayUTCString = getTodayUTCString();
     switch (value) {
       case 'custom':
         // Don't change dates when custom is selected
         break;
       case 'today':
-        setStartDate(format(today, 'yyyy-MM-dd'));
-        setEndDate(format(today, 'yyyy-MM-dd'));
+        setStartDate(todayUTCString);
+        setEndDate(todayUTCString);
         break;
-      case 'thisweek':
-        setStartDate(format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
-        setEndDate(format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+      case 'yesterday': {
+        const yesterdayUTC = new Date();
+        yesterdayUTC.setUTCDate(yesterdayUTC.getUTCDate() - 1);
+        const yesterdayUTCString = yesterdayUTC.toISOString().slice(0, 10);
+        setStartDate(yesterdayUTCString);
+        setEndDate(yesterdayUTCString);
         break;
-      case 'last7days':
-        setStartDate(format(subDays(today, 7), 'yyyy-MM-dd'));
-        setEndDate(format(today, 'yyyy-MM-dd'));
+      }
+      case 'thisweek': {
+        const today = new Date();
+        const firstDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - today.getUTCDay() + 1));
+        const lastDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - today.getUTCDay() + 7));
+        setStartDate(firstDay.toISOString().slice(0, 10));
+        setEndDate(lastDay.toISOString().slice(0, 10));
         break;
-      case 'thismonth':
-        setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
-        setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+      }
+      case 'last7days': {
+        const today = new Date();
+        const last7 = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        setStartDate(last7.toISOString().slice(0, 10));
+        setEndDate(todayUTCString);
         break;
-      case 'lastmonth':
-        const lastMonth = subMonths(today, 1);
-        setStartDate(format(startOfMonth(lastMonth), 'yyyy-MM-dd'));
-        setEndDate(format(endOfMonth(lastMonth), 'yyyy-MM-dd'));
+      }
+      case 'thismonth': {
+        const today = new Date();
+        const firstDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+        const lastDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0));
+        setStartDate(firstDay.toISOString().slice(0, 10));
+        setEndDate(lastDay.toISOString().slice(0, 10));
         break;
+      }
+      case 'lastmonth': {
+        const today = new Date();
+        const firstDayLastMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 1, 1));
+        const lastDayLastMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 0));
+        setStartDate(firstDayLastMonth.toISOString().slice(0, 10));
+        setEndDate(lastDayLastMonth.toISOString().slice(0, 10));
+        break;
+      }
     }
   };
 
@@ -176,6 +202,7 @@ const PerformsTeam = () => {
                 <SelectContent>
                   <SelectItem value="custom">Custom Range</SelectItem>
                   <SelectItem value="today">Today</SelectItem>
+                  <SelectItem value="yesterday">Yesterday</SelectItem>
                   <SelectItem value="thisweek">This Week</SelectItem>
                   <SelectItem value="last7days">Last 7 Days</SelectItem>
                   <SelectItem value="thismonth">This Month</SelectItem>

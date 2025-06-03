@@ -10,11 +10,16 @@ import { ConversionData } from '@/types';
 import { format, subDays, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import { CountryFlag } from '@/components/CountryFlag';
 
+function getTodayUTCString() {
+  const now = new Date();
+  return now.toISOString().slice(0, 10); // yyyy-mm-dd
+}
+
 const Conversions = () => {
   const [conversions, setConversions] = useState<ConversionData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [startDate, setStartDate] = useState(getTodayUTCString());
+  const [endDate, setEndDate] = useState(getTodayUTCString());
   const [preset, setPreset] = useState('today');
   const [showSummary, setShowSummary] = useState(false);
 
@@ -24,31 +29,43 @@ const Conversions = () => {
 
   const handlePresetChange = (value: string) => {
     setPreset(value);
-    const today = new Date();
-    
+    const todayUTCString = getTodayUTCString();
     switch (value) {
       case 'today':
-        setStartDate(format(today, 'yyyy-MM-dd'));
-        setEndDate(format(today, 'yyyy-MM-dd'));
+        setStartDate(todayUTCString);
+        setEndDate(todayUTCString);
         break;
-      case 'yesterday':
-        const yesterday = subDays(today, 1);
-        setStartDate(format(yesterday, 'yyyy-MM-dd'));
-        setEndDate(format(yesterday, 'yyyy-MM-dd'));
+      case 'yesterday': {
+        const yesterdayUTC = new Date();
+        yesterdayUTC.setUTCDate(yesterdayUTC.getUTCDate() - 1);
+        const yesterdayUTCString = yesterdayUTC.toISOString().slice(0, 10);
+        setStartDate(yesterdayUTCString);
+        setEndDate(yesterdayUTCString);
         break;
-      case 'last7days':
-        setStartDate(format(subDays(today, 7), 'yyyy-MM-dd'));
-        setEndDate(format(today, 'yyyy-MM-dd'));
+      }
+      case 'last7days': {
+        const today = new Date();
+        const last7 = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+        setStartDate(last7.toISOString().slice(0, 10));
+        setEndDate(todayUTCString);
         break;
-      case 'thismonth':
-        setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
-        setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+      }
+      case 'thismonth': {
+        const today = new Date();
+        const firstDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+        const lastDay = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0));
+        setStartDate(firstDay.toISOString().slice(0, 10));
+        setEndDate(lastDay.toISOString().slice(0, 10));
         break;
-      case 'lastmonth':
-        const lastMonth = subMonths(today, 1);
-        setStartDate(format(startOfMonth(lastMonth), 'yyyy-MM-dd'));
-        setEndDate(format(endOfMonth(lastMonth), 'yyyy-MM-dd'));
+      }
+      case 'lastmonth': {
+        const today = new Date();
+        const firstDayLastMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 1, 1));
+        const lastDayLastMonth = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 0));
+        setStartDate(firstDayLastMonth.toISOString().slice(0, 10));
+        setEndDate(lastDayLastMonth.toISOString().slice(0, 10));
         break;
+      }
     }
   };
 
