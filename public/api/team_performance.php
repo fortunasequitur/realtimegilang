@@ -9,6 +9,24 @@ if ($conn->connect_error) {
 $start = isset($_GET['start']) && $_GET['start'] !== '' ? $_GET['start'] : date('Y-m-d', strtotime('monday this week'));
 $end = isset($_GET['end']) && $_GET['end'] !== '' ? $_GET['end'] : date('Y-m-d', strtotime('sunday this week'));
 
+// Ambil semua SUB ID unik dari visits dan conversions pada rentang tanggal
+$all_subids = [];
+$res_subid1 = $conn->query("SELECT DISTINCT subsource AS subid FROM visits WHERE DATE(timestamp) BETWEEN '$start' AND '$end'");
+while($row = $res_subid1->fetch_assoc()) {
+    $subid = isset($row['subid']) ? trim($row['subid']) : '';
+    if ($subid !== '') {
+        $all_subids[$subid] = true;
+    }
+}
+$res_subid2 = $conn->query("SELECT DISTINCT subid FROM conversions WHERE DATE(time) BETWEEN '$start' AND '$end'");
+while($row = $res_subid2->fetch_assoc()) {
+    $subid = isset($row['subid']) ? trim($row['subid']) : '';
+    if ($subid !== '') {
+        $all_subids[$subid] = true;
+    }
+}
+$all_subids = array_keys($all_subids);
+
 $team = [];
 // 1. Ambil clicks & unique dari visits
 $res1 = $conn->query("
@@ -66,6 +84,18 @@ while($row = $res2->fetch_assoc()) {
     } else {
         $team[$subid]['conversions'] = (int)$row['conversions'];
         $team[$subid]['earnings'] = (float)$row['earnings'];
+    }
+}
+// Pastikan semua subid dari $all_subids tetap ada di $team
+foreach ($all_subids as $subid) {
+    if (!isset($team[$subid])) {
+        $team[$subid] = [
+            "subid" => $subid,
+            "clicks" => 0,
+            "unique" => 0,
+            "conversions" => 0,
+            "earnings" => 0.0
+        ];
     }
 }
 // 3. Ranking: conversions DESC, earnings DESC
