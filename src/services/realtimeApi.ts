@@ -117,7 +117,7 @@ export const realtimeApi = {
         throw new Error('Failed to fetch live conversions');
       }
       const data = await response.json();
-      return data.slice(0, 10).map((item: any) => ({
+      return data.map((item: any) => ({
         id: item.id,
         time: item.time,
         subid: item.subid,
