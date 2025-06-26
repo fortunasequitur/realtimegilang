@@ -117,10 +117,13 @@ const LivePerforms = () => {
                         </Badge>
                       </TableCell>
                       <TableCell className="py-1 px-2">
-                        <CountryFlag 
-                          countryCode={click.country} 
-                          className="w-5 h-4"
-                        />
+                        <div className="flex items-center gap-2">
+                          <CountryFlag 
+                            countryCode={click.country} 
+                            className="w-5 h-4"
+                          />
+                          <span className="text-xs text-muted-foreground font-mono">{click.country}</span>
+                        </div>
                       </TableCell>
                       <TableCell className="py-1 px-2">
                         <img 
