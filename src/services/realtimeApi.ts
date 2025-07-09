@@ -90,7 +90,7 @@ for (let i = 0; i < 5; i++) {
 export const realtimeApi = {
   getLiveClicks: async (): Promise<VisitData[]> => {
     try {
-      const response = await fetch('https://sobatdigital.online/api/visits_json.php');
+      const response = await fetch('https://shortlink.hirely.biz.id/api/visits_json.php');
       if (!response.ok) {
         throw new Error('Failed to fetch live clicks');
       }
@@ -112,7 +112,7 @@ export const realtimeApi = {
 
   getLiveConversions: async (): Promise<ConversionData[]> => {
     try {
-      const response = await fetch('https://sobatdigital.online/api/get_conversions.php');
+      const response = await fetch('https://shortlink.hirely.biz.id/api/get_conversions.php');
       if (!response.ok) {
         throw new Error('Failed to fetch live conversions');
       }

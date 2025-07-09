@@ -8,7 +8,7 @@ class MySQLApiService {
 
   async getLiveClicks(): Promise<VisitData[]> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/visits.php');
+      const response = await fetch('https://shortlink.hirely.biz.id/api/visits.php');
       return await response.json();
     } catch (error) {
       console.error('Error fetching live clicks:', error);
@@ -18,7 +18,7 @@ class MySQLApiService {
 
   async getLiveConversions(): Promise<ConversionData[]> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/get_conversions.php');
+      const response = await fetch('https://shortlink.hirely.biz.id/api/get_conversions.php');
       return await response.json();
     } catch (error) {
       console.error('Error fetching live conversions:', error);
@@ -28,7 +28,7 @@ class MySQLApiService {
 
   async getStatsSummary(): Promise<StatsSummary> {
     try {
-      const response = await fetch('https://sobatdigital.online/api/stats_summary.php');
+      const response = await fetch('https://shortlink.hirely.biz.id/api/stats_summary.php');
       return await response.json();
     } catch (error) {
       console.error('Error fetching stats summary:', error);
@@ -43,7 +43,7 @@ class MySQLApiService {
 
   async getStatsData(startDate: string, endDate: string): Promise<StatsData[]> {
     try {
-      const response = await fetch(`https://sobatdigital.online/api/stats_json.php?start=${startDate}&end=${endDate}`);
+      const response = await fetch(`https://shortlink.hirely.biz.id/api/stats_json.php?start=${startDate}&end=${endDate}`);
       return await response.json();
     } catch (error) {
       console.error('Error fetching stats data:', error);
@@ -53,7 +53,7 @@ class MySQLApiService {
 
   async getTeamPerformance(startDate: string, endDate: string): Promise<TeamPerformance[]> {
     try {
-      const response = await fetch(`https://sobatdigital.online/api/team_performance.php?start=${startDate}&end=${endDate}`);
+      const response = await fetch(`https://shortlink.hirely.biz.id/api/team_performance.php?start=${startDate}&end=${endDate}`);
       return await response.json();
     } catch (error) {
       console.error('Error fetching team performance:', error);
@@ -63,7 +63,7 @@ class MySQLApiService {
 
   async getConversionsByDate(startDate: string, endDate: string): Promise<ConversionData[]> {
     try {
-      const response = await fetch(`https://sobatdigital.online/api/conversions_json.php?start=${startDate}&end=${endDate}`);
+      const response = await fetch(`https://shortlink.hirely.biz.id/api/conversions_json.php?start=${startDate}&end=${endDate}`);
       return await response.json();
     } catch (error) {
       console.error('Error fetching conversions by date:', error);
